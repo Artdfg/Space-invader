@@ -16,7 +16,7 @@ fenetre_principale = Tk()
 fenetre_principale.title("Space invaders")
 fenetre_principale.geometry("800x600")
 
-Score = "0"()
+Score = "0"
 labelScore = Label(fenetre_principale, text = "Score")
 labelScore.pack()
 
