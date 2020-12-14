@@ -8,9 +8,7 @@ Todo : Canevas principal, label du score actuel, bouton qui lance la partie, bou
 """
 
 
-
-from tkinter import Tk, Button, Canvas, StringVar, IntVar
-
+from tkinter import Tk, Button, Canvas, Label, StringVar, IntVar #Importation des biblio
 
 dim_fenetre_principale_x = 800
 dim_fenetre_principale_y = 600
@@ -20,6 +18,9 @@ fenetre_principale = Tk()
 fenetre_principale.title("Space invaders")
 fenetre_principale.geometry(str(dim_fenetre_principale_x) + "x" + str(dim_fenetre_principale_y))
 
+
+def f_lancerjeu():
+    print("Le jeu se lance")
 
 
 def f_affichage() :
@@ -35,12 +36,16 @@ def f_affichage() :
 
 
 
+    Score = "0"
+    labelScore = Label(fenetre_principale, text = "Score")
+    labelScore.pack()
 
-
+    buttonJouer = Button(fenetre_principale, text="Jouer !", fg = 'red', command = f_lancerjeu)
+    buttonJouer.pack()
 
 
 f_affichage()
 
 
-
 fenetre_principale.mainloop()
+
