@@ -4,7 +4,7 @@ Code UTF-8
 Created on Mon Dec 14
 TP3-4 Space Invader
 @Author : Roman Grim and Arthur Laudien
-Todo : Canevas principal, label du score actuel, bouton qui lance la partie, bouton qui quitte proprement, Alien qui bouge tout seul, Joueur qui bouge
+Todo : Alien qui bouge tout seul, Joueur qui bouge
 """
 
 
@@ -15,8 +15,11 @@ gif_dict = {}
 
 
 #fenetre graphique
-class jeu() :
-    
+class joueur() :
+    def __init__ (self) :
+        self.joueur = Canvas(jeu.)
+
+class jeu() :  
 
     def __init__ (self) : # crée ma fanetre du jeu space invader
 
@@ -28,6 +31,12 @@ class jeu() :
         print("Le jeu se lance")
         #self.Score = "0"
         self.boutonJouer.destroy()
+        self.ecran_menu.destroy()
+
+        self.ecran_jeu = Canvas(self.fenetre_principale, bg='white')#creation d'un canvas, zone de dessin a linterieur de la fenetre tkinter auquel on peut ajouter des trucs
+        self.ecran_jeu.pack(padx = 5, pady = 5)#inclusion, affichage du canvas dans la fenetre
+        self.ecran_jeu.config(height = 800, width = 800)
+
         self.labelScore = Label(self.fenetre_principale, text = "Score")
         self.labelScore.pack(side = 'top')
 
@@ -51,14 +60,14 @@ class jeu() :
     def f_affichage(self) :
 
         # canvas ecran de jeu
-        self.ecran_jeu = Canvas(self.fenetre_principale, bg='white')#creation d'un canvas, zone de dessin a linterieur de la fenetre tkinter auquel on peut ajouter des trucs
-        self.ecran_jeu.pack(padx = 5, pady = 5)#inclusion, affichage du canvas dans la fenetre
+        self.ecran_menu = Canvas(self.fenetre_principale, bg='white')#creation d'un canvas, zone de dessin a linterieur de la fenetre tkinter auquel on peut ajouter des trucs
+        self.ecran_menu.pack(padx = 5, pady = 5)#inclusion, affichage du canvas dans la fenetre
 
         # affichage image menu
         self.img_ouverture = PhotoImage(file = "image_menu.gif")
-        self.ecran_jeu.create_image(0, 0, anchor = "nw", image = self.img_ouverture)
-        self.ecran_jeu.config(height = self.img_ouverture.height(), width = self.img_ouverture.width()) 
-        self.ecran_jeu.pack()
+        self.ecran_menu.create_image(0, 0, anchor = "nw", image = self.img_ouverture)
+        self.ecran_menu.config(height = self.img_ouverture.height(), width = self.img_ouverture.width()) 
+        self.ecran_menu.pack()
         
         #bouton jouer
         self.boutonJouer = Button(self.fenetre_principale, text="Jouer !", fg = 'red', command = self.f_lancerjeu)
