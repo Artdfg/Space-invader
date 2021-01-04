@@ -133,7 +133,7 @@ class alien() :
 
         self.deplacement()
 
-
+  
 
 
 
