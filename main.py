@@ -10,10 +10,6 @@ Todo : Alien qui bouge tout seul, Joueur qui bouge
 
 from tkinter import Tk, Button, Canvas, Label, StringVar, IntVar, PhotoImage, filedialog, messagebox, LEFT #Importation des biblio
 
-
-gif_dict = {}
-
-
 #fenetre graphique
 class jeu() :  
 
@@ -36,7 +32,7 @@ class jeu() :
         self.labelScore = Label(self.fenetre_principale, text = "Score")
         self.labelScore.pack(side = 'top')
 
-        self.joueur = joueur(self.ecran_jeu)
+        self.joueur = joueur(self.ecran_jeu,self.fenetre_principale)
 
 
     def f_quit(self): #fenetre confirmation quitter le jeu
@@ -79,10 +75,26 @@ class jeu() :
         self.fenetre_principale.mainloop()
 
 class joueur() :
-    def __init__ (self, ecran_jeu) :
+    def __init__ (self, ecran_jeu,fenetre_principale) :
+        self.fenetre_principale = fenetre_principale
+        self.ecran_jeu = ecran_jeu
         self.img_joueur = PhotoImage(file = "vaisseau.gif")     #dire que img_joueur = vaisseau.gif
-        self.move = ecran_jeu.create_image(400, 750, image=self.img_joueur)       #Création de l'image et la place
-        #ecran_jeu.move(self.move,100,100)      #Exemple mouvement 
+        self.moove = self.ecran_jeu.create_image(400, 750, image=self.img_joueur)       #Création de l'image et la place
+        
+        self.fenetre_principale.bind('<Right>' , lambda event : self.moove_droite()) #On se déplace sur la droite
+        self.fenetre_principale.bind('<Left>' , lambda event : self.moove_gauche()) #On se déplace sur la gauche
+        self.posX = 400
+        #ecran_jeu.move(self.moove,100,100)      #Exemple mouvement 
+
+    def moove_droite (self) : #Quand l'event touche droite est activé 
+        if self.posX < 800 :    #On vérif qu'on va pas sortir de l'écran
+            self.ecran_jeu.move(self.moove,50,0)    #On bouge
+            self.posX = self.posX+50    #On actualise la valeur de posX
+
+    def moove_gauche (self) :
+        if self.posX > 0 :
+            self.ecran_jeu.move(self.moove,-50,0)
+            self.posX = self.posX-50
 
 
 jouer = jeu()
