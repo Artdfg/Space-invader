@@ -8,17 +8,13 @@ Todo : Alien qui bouge tout seul, Joueur qui bouge
 """
 
 
-from tkinter import Tk, Button, Canvas, Label, StringVar, IntVar, PhotoImage, filedialog, messagebox #Importation des biblio
+from tkinter import Tk, Button, Canvas, Label, StringVar, IntVar, PhotoImage, filedialog, messagebox, LEFT #Importation des biblio
 
 
 gif_dict = {}
 
 
 #fenetre graphique
-class joueur() :
-    def __init__ (self) :
-        self.joueur = Canvas(jeu.)
-
 class jeu() :  
 
     def __init__ (self) : # crée ma fanetre du jeu space invader
@@ -39,6 +35,8 @@ class jeu() :
 
         self.labelScore = Label(self.fenetre_principale, text = "Score")
         self.labelScore.pack(side = 'top')
+
+        self.joueur = joueur(self.ecran_jeu)
 
 
     def f_quit(self): #fenetre confirmation quitter le jeu
@@ -73,13 +71,18 @@ class jeu() :
         self.boutonJouer = Button(self.fenetre_principale, text="Jouer !", fg = 'red', command = self.f_lancerjeu)
         self.boutonJouer.pack()
 
-        # bouton quitter
+        #bouton quitter
         self.boutonQuit = Button(self.fenetre_principale, text="Quitter", activebackground = 'red', activeforeground='white', command= self.f_quit)
         self.boutonQuit.pack(side= 'bottom')
 
 
         self.fenetre_principale.mainloop()
 
+class joueur() :
+    def __init__ (self, ecran_jeu) :
+        self.img_joueur = PhotoImage(file = "vaisseau.gif")     #dire que img_joueur = vaisseau.gif
+        self.move = ecran_jeu.create_image(400, 750, image=self.img_joueur)       #Création de l'image et la place
+        #ecran_jeu.move(self.move,100,100)      #Exemple mouvement 
 
 
 jouer = jeu()
