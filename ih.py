@@ -6,7 +6,8 @@ TP3-4 Space Invader
 @Author : Roman Grim and Arthur Laudien
 Todo : missiles et destruction des items et creer plusieurs aliens
 
-renommer les variables de postion du vaisseau !!!!!!!!!!!!
+Todo :Detruire les missiles au contact alien/joueur/écran, détruire les aliens au contact de missiles(hitbox), 
+faires plusieures aliens, avoir un nombre de vie/avoir de la vie, score, barrieres
 
 """
 
@@ -14,6 +15,8 @@ renommer les variables de postion du vaisseau !!!!!!!!!!!!
 from tkinter import Tk, Button, Canvas, Label, StringVar, IntVar, PhotoImage, filedialog, messagebox, LEFT #Importation des biblio
 
 import random
+
+
 
 
 #fenetre graphique
@@ -140,10 +143,11 @@ class alien() :
 
     def tirer(self) :
 
-        if random.randint(0,100)%8 == 0 : 
+        if random.randint(0,100)%8 == 0 : # revoir ca 
             print("bsr!!!!!!!")
             print(self.pos_alien_y)
-            self.missile = missile(self.pos_x_max, self.pos_alien_y, self.ecran_jeu, self.role)
+
+            missile(self.pos_x_max, self.pos_alien_y, self.ecran_jeu, self.role)
 
         self.ecran_jeu.after(400, self.tirer) 
 
@@ -175,6 +179,7 @@ class joueur() :
         self.img_joueur = PhotoImage(file = "vaisseau.gif")     #dire que img_joueur = vaisseau.gif
         self.moove = self.ecran_jeu.create_image(self.pos_x_max, self.pos_y_max, image=self.img_joueur)       #Création de l'image et la place
         
+
         self.fenetre_principale.bind('<Right>' , lambda event : self.moove_droite()) #On se déplace sur la droite
         self.fenetre_principale.bind('<Left>' , lambda event : self.moove_gauche()) #On se déplace sur la gauche
         self.fenetre_principale.bind('<space>' , lambda event : self.tirer()) #On envoie un missile
@@ -216,75 +221,86 @@ class missile() :
         self.pos_missile_x = pos_x_max
         self.pos_missile_y = pos_y_max
 
+        self.role = role
+
         self.ecran_jeu = ecran_jeu
 
 
-        if role == "joueur" :
+        if self.role == "joueur" :
 
             self.img_missile = PhotoImage(file = "missile2.gif")
+            self.sens = -1
+
         
         else : 
 
             self.img_missile = PhotoImage(file = "missile3.gif")
+            self.sens = 1
             
-        self.moove = self.ecran_jeu.create_image(self.pos_missile_x, self.pos_missile_y, image=self.img_missile)     #Création de l'image et la place
+        self.moove = self.ecran_jeu.create_image(self.pos_missile_x, self.pos_missile_y + self.sens*25, image=self.img_missile)     #Création de l'image et la place
 
-        if role == "joueur" :
+        self.prop_missile()
+        
+    def mvt_missile(self) :
+
+        self.ecran_jeu.move(self.moove, 0, self.sens*25)
+        self.pos_missile_y = self.pos_missile_y + self.sens*25
+
+
+    def prop_missile (self) :
     
-            self.mvt_missile_vaisseau()
-            self.contact_vaisseau()
+        self.mvt_missile()    
+        self.sortie_ecran()
+        self.contact()
+
+        if not self.out_of_screen :
         
-        else : 
-
-            self.mvt_missile_alien()
-            self.contact_alien()
-        
+            self.ecran_jeu.after(100, self.prop_missile)
 
 
 
 
-    def mvt_missile_vaisseau(self) :
 
-        self.ecran_jeu.move(self.moove, 0, -25)
-        self.pos_missile_y = self.pos_missile_y - 25
+    def contact(self) :
 
-        self.ecran_jeu.after(100, self.mvt_missile_vaisseau) 
+        if self.role == "joueur" and len(self.ecran_jeu.find_overlapping(jouer.alien.pos_x_max, jouer.alien.pos_y_max , jouer.alien.pos_x_max + 28, jouer.alien.pos_y_max + 20 )) >=2 :
 
-
-    def contact_vaisseau(self) :
-
-        if self.pos_missile_x == jouer.alien.pos_x_max and self.pos_missile_y == jouer.alien.pos_y_max :
-
-            print("touché !!!!!!!!!!!!!!!!!!")
+            print("homme touche alien")
 
             #score = score + 1
 
             #alien disparait
+        if self.role == "alien" and len(self.ecran_jeu.find_overlapping(jouer.joueur.pos_x_max, jouer.joueur.pos_y_max , jouer.joueur.pos_x_max + 45, jouer.joueur.pos_y_max + 45 )) >=2 :
 
-        self.ecran_jeu.after(100, self.contact_vaisseau)
-
+            print("alien touche homme")
         # if 0 alien sur le terrain alors win 
 
+    def sortie_ecran(self) :
 
+        self.out_of_screen = False
 
+        if self.role == "joueur" :
 
-    def mvt_missile_alien(self) :
-    
-        self.ecran_jeu.move(self.moove, 0, 25)
-        self.pos_missile_y = self.pos_missile_y + 25
+            if self.pos_missile_y < 0 :
 
-        self.ecran_jeu.after(100, self.mvt_missile_alien) 
-
-
-    def contact_alien(self) : #game over
-
-        if self.pos_missile_x == jouer.alien.pos_x_max and self.pos_missile_y == jouer.alien.pos_y_max :
-
-            print("touché !!!!!!!!!!!!!!!!!!")
-
+                self.ecran_jeu.delete(self.moove)
+                self.out_of_screen = True
             
+        else :
 
-        self.ecran_jeu.after(100, self.contact_alien)
+            if self.pos_missile_y > 750 :
+
+                self.ecran_jeu.delete(self.moove)
+                self.out_of_screen = True
+
+
+ 
+                
+
+
+
+
+
 
 
 

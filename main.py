@@ -214,10 +214,10 @@ class joueur() :
 class missile() :
 
 
-    def __init__(self, pos_x_max, pos_y_max, ecran_jeu, role) :
+    def __init__(self, pos_x, pos_y, ecran_jeu, role) :
 
-        self.pos_missile_x = pos_x_max
-        self.pos_missile_y = pos_y_max
+        self.pos_missile_x = pos_x
+        self.pos_missile_y = pos_y
 
         self.ecran_jeu = ecran_jeu
 
