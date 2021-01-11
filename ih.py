@@ -105,6 +105,10 @@ class alien() :
         self.pos_alien_x = 5 
         self.pos_alien_y = 10
 
+        
+        self.pos_x_max = 0
+        self.pos_y_max = 0
+
         self.sens = 1 #vaut plus ou moins 1 selon le sens de déplacement des aliens
 
         self.img_alien = PhotoImage(file = "alien.gif")     #dire que img_alien = vaisseau.gif
@@ -115,20 +119,15 @@ class alien() :
 
 
     def deplacement (self) :
-        
-        print(self.pos_alien_x)
-        print(self.pos_alien_y)
 
-
-        if self.pos_alien_x <= self.dim_ecran_jeu_x and self.pos_alien_x >= 0:
-
-            print(self.pos_alien_x)
-            print(self.pos_alien_y)
+        if self.pos_x_max <= self.dim_ecran_jeu_x and self.pos_x_max >= 0:
 
             self.ecran_jeu.move(self.moove, 25*self.sens, 0)
-            self.pos_alien_x = self.pos_alien_x + 25*self.sens 
+            self.pos_x_max = self.pos_x_max + 25*self.sens 
+        
+            self.ecran_jeu.after(400, self.deplacement)
 
-        if self.pos_alien_x >= self.dim_ecran_jeu_x or self.pos_alien_x <= 0:
+        if self.pos_x_max == self.dim_ecran_jeu_x or self.pos_x_max == 0:
         
             self.sens = -self.sens 
             self.ecran_jeu.move(self.moove, 0, 25)
@@ -138,15 +137,13 @@ class alien() :
 
             self.fenetre_principale.destroy()
 
-        self.ecran_jeu.after(400, self.deplacement)
-
 
     def tirer(self) :
 
         if random.randint(0,100)%8 == 0 : 
             print("bsr!!!!!!!")
             print(self.pos_alien_y)
-            self.missile = missile(self.pos_alien_x, self.pos_alien_y, self.ecran_jeu, self.role)
+            self.missile = missile(self.pos_x_max, self.pos_alien_y, self.ecran_jeu, self.role)
 
         self.ecran_jeu.after(400, self.tirer) 
 
@@ -256,7 +253,7 @@ class missile() :
 
     def contact_vaisseau(self) :
 
-        if self.pos_missile_x == jouer.alien.pos_alien_x and self.pos_missile_y == jouer.alien.pos_alien_y :
+        if self.pos_missile_x == jouer.alien.pos_x_max and self.pos_missile_y == jouer.alien.pos_y_max :
 
             print("touché !!!!!!!!!!!!!!!!!!")
 
@@ -281,7 +278,7 @@ class missile() :
 
     def contact_alien(self) : #game over
 
-        if self.pos_missile_x == jouer.alien.pos_alien_x and self.pos_missile_y == jouer.alien.pos_alien_y :
+        if self.pos_missile_x == jouer.alien.pos_x_max and self.pos_missile_y == jouer.alien.pos_y_max :
 
             print("touché !!!!!!!!!!!!!!!!!!")
 
